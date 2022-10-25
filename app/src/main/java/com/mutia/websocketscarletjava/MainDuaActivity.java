@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import tech.gusavila92.websocketclient.WebSocketClient;
@@ -33,7 +34,7 @@ public class MainDuaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dua);
 
-//        setupRecyclerViewMessage();
+        setupRecyclerViewMessage();
         createWebSocketClient();
     }
 
@@ -67,7 +68,7 @@ public class MainDuaActivity extends AppCompatActivity {
 //                            textView.setText(message);
 
                             try {
-                                List<MessegeResponse> list = null;
+                                List<MessegeResponse> list = new ArrayList<>();
 
                                 MessegeResponse messegeResponse = new MessegeResponse();
                                 JSONArray jsonArray = new JSONArray(message);
@@ -79,11 +80,14 @@ public class MainDuaActivity extends AppCompatActivity {
                                     messegeResponse.setPrice((Double) jsonObj.get("price"));
                                     messegeResponse.setQuantity((Double) jsonObj.get("quantity"));
 
-//                                    list.add(i, messegeResponse);
+                                    list.add(i, messegeResponse);
 //                                    adapter.addItem(messegeResponse);
 
-                                    System.out.println(jsonObj);
+//                                    System.out.println(jsonObj.get("quantity"));
                                 }
+                                System.out.println(list);
+
+                                adapter.setData(list);
 
 //                                textView.setText(jsonArray.toString());
                             }catch (JSONException err){
@@ -132,7 +136,7 @@ public class MainDuaActivity extends AppCompatActivity {
         this.adapter = new MessageAdapter();
         rvMessage = findViewById(R.id.recycler_message);
 
-        rvMessage.setAdapter(adapter);
+        rvMessage.setAdapter(this.adapter);
         rvMessage.setItemAnimator((RecyclerView.ItemAnimator)(new DefaultItemAnimator()));
         rvMessage.setLayoutManager((RecyclerView.LayoutManager)(new LinearLayoutManager((Context)this, RecyclerView.VERTICAL, false)));
     }

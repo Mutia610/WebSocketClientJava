@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_dua, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
         return new ComponentItem(view);
     }
 
@@ -30,8 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MessegeResponse data = items.get(position);
 
-        ((ComponentItem) holder).tvMessage.setText(data.getPrice() + " - " + data.getQuantity());
-
+        ((ComponentItem) holder).tvMessage.setText(data.getPrice() +" - "+ data.getQuantity());
     }
 
     @Override
@@ -44,10 +45,16 @@ public class MessageAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public List<MessegeResponse> getData() {
-        return items;
-    }
+    public void setData(List<MessegeResponse> newData) {
+        if (items != null) {
+            items.addAll(newData);
 
+            notifyDataSetChanged();
+            // notifyItemInserted( getData().size() -1 );
+        } else {
+            items = newData;
+        }
+    }
 
     private static class ComponentItem extends RecyclerView.ViewHolder {
         TextView tvMessage;
